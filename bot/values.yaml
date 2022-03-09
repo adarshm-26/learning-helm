@@ -93,6 +93,17 @@ autoscaling:
 
 nodeSelector: {}
 
-tolerations: []
+tolerations:
+  - key: "gpu"
+    operator: "Exists"
+    effect: "NoSchedule"
 
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: a.label
+            operator: In
+            values:
+              - value.of.label
