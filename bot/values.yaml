@@ -4,11 +4,19 @@
 
 replicaCount: 1
 
-image:
-  repository: an-app
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+images:
+  - repository: an-app
+    name: bot
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+  - repository: curlimages/curl
+    name: curl
+    pullPolicy: Always
+    tag: "7.81.0"
+    command:
+      - "sleep"
+      - "360000"
 
 imagePullSecrets: []
 nameOverride: ""
