@@ -7,7 +7,7 @@ metadata:
   labels:
     {{- include "bot.labels" $ | replace "bot" .name | nindent 4 }}
 spec:
-  {{- if not $.Values.autoscaling.enabled }}
+  {{- if and (not $.Values.autoscaling.enabled) (eq .name $.Chart.Name) }}
   replicas: {{ $.Values.replicaCount }}
   {{- end }}
   selector:
