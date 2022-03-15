@@ -39,16 +39,32 @@ spec:
           command:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          env:
+            {{- range $.Values.secrets }}
+            - name: {{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .name }}
+                  key: {{ .key }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
           {{- $containerName := .name }}
+          volumeMounts:
           {{- range $.Values.configmaps }}
           {{- if and (eq .container $containerName) .needsMounting }}
-          volumeMounts:
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
               readOnly: true
